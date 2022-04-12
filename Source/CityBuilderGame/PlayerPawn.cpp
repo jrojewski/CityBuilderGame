@@ -3,6 +3,7 @@
 
 #include "PlayerPawn.h"
 
+#include "PlayerPawnController.h"
 #include "Math/UnrealMathUtility.h"
 #include "Engine/World.h"
 
@@ -10,7 +11,7 @@
 APlayerPawn::APlayerPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;
@@ -26,6 +27,8 @@ APlayerPawn::APlayerPawn()
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Cast<APlayerPawnController>(GetController())->CallHUD();
 	
 	SpringArm->TargetArmLength = MaxSpringArmLength / 2.0f;
 	NewTargetArmLength = MaxSpringArmLength / 2.0f;
@@ -47,6 +50,19 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerPawn::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("RotateCamera"), this, &APlayerPawn::RotateCamera);
 	PlayerInputComponent->BindAxis(TEXT("ZoomCamera"), this, &APlayerPawn::ZoomCamera);
+}
+
+FText APlayerPawn::GetScoreText() const
+{
+	FString ScoreS = FString::SanitizeFloat(Score);
+	FText ScoreText = FText::FromString(ScoreS);
+	return ScoreText;
+}
+
+void APlayerPawn::SetScore(float _points)
+{
+	Score = Score + _points;
+	return;
 }
 
 void APlayerPawn::MoveForward(float AxisValue)

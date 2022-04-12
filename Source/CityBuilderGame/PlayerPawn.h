@@ -23,15 +23,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-private:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	USceneComponent* Root;
 
 	UPROPERTY(EditAnywhere)
@@ -43,6 +35,20 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UFloatingPawnMovement* FloatingPawnMovement;
 
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintPure)
+	FText GetScoreText() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetScore(float _points);
+
+private:
 	UFUNCTION()
 	void MoveForward(float AxisValue);
 	UFUNCTION()
@@ -65,4 +71,6 @@ private:
 	float MinSpringArmLength = 150.0f;
 	UPROPERTY(EditDefaultsOnly)
 	float MaxSpringArmLength = 750.0f;
+
+	float Score = 0.0f;
 };

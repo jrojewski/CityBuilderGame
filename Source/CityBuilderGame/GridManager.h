@@ -25,16 +25,22 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	FVector GetClosestGridCellPosition(FVector_NetQuantize InPosition);
+	AGridCell* GetClosestGridCell(FVector_NetQuantize InPosition);
+
+	int NumOfBuildings = 0;
 private:
 	UPROPERTY(EditDefaultsOnly)
-	int GridSize = 10;
+	int GridSize = 50;
 	UPROPERTY(EditDefaultsOnly)
-	int WorldGridSize = 1000;
+	int WorldGridSize = 100;
 	UPROPERTY(EditDefaultsOnly)
-	TArray<AActor*> GridArray;
+	TArray<AGridCell*> GridArray;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AGridCell> BP_GridCell;
 	UFUNCTION()
 	void PopulateGrid();
+	UFUNCTION()
+	void SetupGridCellNeighbours();
 };

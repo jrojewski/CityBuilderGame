@@ -18,6 +18,22 @@ void AGridCell::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	GridCellType = static_cast<EGridCellType>(FMath::RandRange(0, 2));
+
+	switch (GridCellType) {
+	case EGridCellType::Green:
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Green Type Cell spawn!"));
+		Mesh->SetMaterial(0, GreenGridCellType);
+		break;
+	case EGridCellType::Grey:
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Black, TEXT("Grey Type Cell spawn!"));
+		Mesh->SetMaterial(0, GreyGridCellType);
+		break;
+	case EGridCellType::Blue:
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Blue Type Cell spwan!"));
+		Mesh->SetMaterial(0, BlueGridCellType);
+		break;
+	};
 }
 
 // Called every frame
@@ -25,5 +41,10 @@ void AGridCell::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+EGridCellType AGridCell::GetGridCellType() const
+{
+	return GridCellType;
 }
 
