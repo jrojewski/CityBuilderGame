@@ -12,10 +12,7 @@ void UBuildingButton::ClickOnBuildingButton()
 	APlayerPawnController* PlayerPawnController = Cast<APlayerPawnController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	PlayerPawnController->LimitedNumberOfBuildingsType = _LimitedNumberOfBuildingsType;
 
-	if (*_LimitedNumberOfBuildingsType == 0)
-	{
-		return;
-	}
+	if (*_LimitedNumberOfBuildingsType == 0) return;
 
 	PlayerPawnController->SetPlaceableActorType(PlaceableActorType);
 	PlayerPawnController->SetPlacementModeEnabled(true);

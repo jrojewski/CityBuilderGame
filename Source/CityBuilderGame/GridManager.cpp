@@ -44,7 +44,7 @@ FVector AGridManager::GetClosestGridCellPosition(FVector_NetQuantize InPosition)
 		if (FVector::Distance(GridCell->GetActorLocation(), InPosition) < ClosestDistance)
 		{
 			ClosestPosition = GridCell->GetActorLocation();
-			ClosestDistance = FVector::Distance(GridCell->GetActorLocation(), InPosition);
+			ClosestDistance = FVector::Distance(ClosestPosition, InPosition);
 		}
 	}
 

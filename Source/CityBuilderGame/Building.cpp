@@ -30,7 +30,8 @@ float ABuilding::CalculatePointsBasedOnGridCellType(AGridCell* _CurrentGridCell)
 
 	EGridCellType GridCellType = _CurrentGridCell->GetGridCellType();
 
-	switch (GridCellType) {
+	switch (GridCellType) 
+	{
 	case EGridCellType::Green:
 		Multiplier = GreenGridCellTypeMultiplier;
 		break;

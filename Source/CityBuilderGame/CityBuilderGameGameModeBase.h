@@ -18,6 +18,7 @@ struct FBuildingTypeData
 	UPROPERTY(EditAnywhere)
 	int LimitedNumberOfBuildingsType;
 };
+
 UCLASS()
 class CITYBUILDERGAME_API ACityBuilderGameGameModeBase : public AGameModeBase
 {

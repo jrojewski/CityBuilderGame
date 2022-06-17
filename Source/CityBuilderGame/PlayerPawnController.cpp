@@ -190,6 +190,5 @@ void APlayerPawnController::SpawnBuilding()
 
 void APlayerPawnController::DeactivateConstructionEffects(UParticleSystemComponent* _SmokeUParticleSystemComponent)
 {
-	//_SmokeUParticleSystemComponent->SetEmitterEnable(TEXT("P_Steam_Lit"), false);
 	_SmokeUParticleSystemComponent->DeactivateSystem();
 }
