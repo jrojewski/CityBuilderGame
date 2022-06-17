@@ -8,5 +8,7 @@
 
 void UStartGameBoard::StartGame()
 {
-	Cast<APlayerPawnController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->PrepareGameHUD();
+	APlayerPawnController* CurrentPlayerController = Cast<APlayerPawnController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	CurrentPlayerController->PrepareGameHUD();
+	CurrentPlayerController->bInGameMenuAvailable = true;
 }

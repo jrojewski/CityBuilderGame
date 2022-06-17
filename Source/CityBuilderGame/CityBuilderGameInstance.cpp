@@ -16,6 +16,10 @@ UCityBuilderGameInstance::UCityBuilderGameInstance(const FObjectInitializer& Obj
 	if (PlayerHUDBPClass.Class == nullptr) return;
 	PlayerHUDClass = PlayerHUDBPClass.Class;
 
+	ConstructorHelpers::FClassFinder<UUserWidget> InGameMenuBPClass(TEXT("/Game/Blueprints/WBP_InGameMenu"));
+	if (InGameMenuBPClass.Class == nullptr) return;
+	InGameMenuClass = InGameMenuBPClass.Class;
+
 	ConstructorHelpers::FClassFinder<UUserWidget> EndGameBoardBPClass(TEXT("/Game/Blueprints/WBP_EndGameBoard"));
 	if (EndGameBoardBPClass.Class == nullptr) return;
 	EndGameBoardClass = EndGameBoardBPClass.Class;

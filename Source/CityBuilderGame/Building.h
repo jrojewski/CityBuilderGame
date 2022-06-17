@@ -4,6 +4,7 @@
 
 #include "PlacementComponent.h"
 #include "GridCell.h"
+#include "Sound/SoundCue.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -53,6 +54,13 @@ public:
 	float NeighbourWithWhitePoints = 0.0f;
 	UPROPERTY(EditDefaultsOnly)
 	float NeighbourWithVioletPoints = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	UParticleSystem* ConstructionParticles;
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* ConstructionSound;
+	UPROPERTY(EditDefaultsOnly)
+	USoundCue* ErrorSound;
 
 protected:
 	// Called when the game starts or when spawned

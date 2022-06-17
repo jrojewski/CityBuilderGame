@@ -13,6 +13,7 @@
 #include "PlayerPawn.h"
 #include "Building.h"
 #include "CityBuilderGameGameModeBase.h"
+#include "Particles/ParticleSystemComponent.h"
 
 APlayerPawnController::APlayerPawnController() {
 	PrimaryActorTick.bCanEverTick = true;
@@ -29,8 +30,6 @@ void APlayerPawnController::BeginPlay()
 	FInputModeGameAndUI InputModeGameAndUI;
 	InputModeGameAndUI.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	this->SetInputMode(InputModeGameAndUI);
-	
-	//SetPlacementModeEnabled(true);
 }
 
 void APlayerPawnController::CallHUD() {
@@ -49,6 +48,11 @@ void APlayerPawnController::CallHUD() {
 	PlayerHUD->AddToViewport();
 	PlayerHUD->SetVisibility(ESlateVisibility::Hidden);
 
+	InGameMenu = CreateWidget<UUserWidget>(this, CityBuilderGameInstance->InGameMenuClass);
+	if (InGameMenu == nullptr) return;
+	InGameMenu->AddToViewport();
+	InGameMenu->SetVisibility(ESlateVisibility::Hidden);
+
 	EndGameBoard = CreateWidget<UEndGameBoard>(this, CityBuilderGameInstance->EndGameBoardClass);
 	if (EndGameBoard == nullptr) return;
 	EndGameBoard->AddToViewport();
@@ -65,6 +69,7 @@ void APlayerPawnController::CallEndGameBoard()
 {
 	PlayerHUD->SetVisibility(ESlateVisibility::Hidden);
 	EndGameBoard->SetVisibility(ESlateVisibility::Visible);
+	bInGameMenuAvailable = false;
 }
 
 void APlayerPawnController::Tick(float DeltaTime)
@@ -91,16 +96,24 @@ void APlayerPawnController::SetPlaceableActorType(TSubclassOf<ABuilding> NewBuil
 
 void APlayerPawnController::SetPlacementModeEnabled(bool bIsEnabled)
 {
-	if (bPlacementModeEnabled == bIsEnabled) return;
+	if (bPlacementModeEnabled == bIsEnabled)
+	{
+		if (PlaceableActor != nullptr)
+		{
+			PlaceableActor->Destroy();
+		}
+	}
+	else
+	{
+		bPlacementModeEnabled = bIsEnabled;
+	}
 
-	bPlacementModeEnabled = bIsEnabled;
 
 	if (bIsEnabled)
 	{
 		FActorSpawnParameters BuildingSpawnParams;
 		BuildingSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		PlaceableActor = GetWorld()->SpawnActor<ABuilding>(PlaceableActorType,FVector(0.0f, 0.0f, -1000000.0f), FRotator(0.0f, 0.0f, 0.0f), BuildingSpawnParams);
-		//UActorComponent* NewComp = PlaceableActor->AddComponentByClass(UPlacementComponent::StaticClass(), false, FTransform(FRotator(0.0f,0.0f,0.0f),FVector(0.0f,0.0f,0.0f)), false);
 	}
 	else
 	{
@@ -137,7 +150,6 @@ void APlayerPawnController::SpawnBuilding()
 	{
 		if (!PlaceableActor)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("PlaceableActor nullptr"));
 			return;
 		}
 
@@ -157,16 +169,27 @@ void APlayerPawnController::SpawnBuilding()
 			CurrentGridManager->NumOfBuildings++;
 
 			float CalculatedPoints = PlaceableActor->GetPoints();
-			UE_LOG(LogTemp, Warning, TEXT("CalculatedPoints: %f"), CalculatedPoints)
 			CalculatedPoints = CalculatedPoints * PlaceableActor->CalculatePointsBasedOnGridCellType(CurrentGridCell);
-			UE_LOG(LogTemp, Warning, TEXT("CalculatedPoints: %f"), CalculatedPoints)
 			CalculatedPoints = CalculatedPoints + PlaceableActor->CalculatePointsBasedOnNeighbours(CurrentGridCell);
-
-			UE_LOG(LogTemp, Warning, TEXT("CalculatedPoints: %f"), CalculatedPoints)
 
 			Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0))->SetScore(CalculatedPoints);
 
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), PlaceableActor->ConstructionSound, PlaceableActor->GetActorTransform().GetLocation());
+			UParticleSystemComponent* SmokeParticleSystemComponent = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), PlaceableActor->ConstructionParticles, PlaceableActor->GetActorTransform().GetLocation(), FRotator::ZeroRotator, FVector(1.5f, 0.5f, 0.5f));
+			ConstructionEffectsDelegate.BindUFunction(this, FName("DeactivateConstructionEffects"), SmokeParticleSystemComponent);
+			GetWorldTimerManager().SetTimer(ConstructionEffectsTimer, ConstructionEffectsDelegate, 0.05f, false);
+
 			Cast<ACityBuilderGameGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()))->CheckWinCondition();
 		}
+		else 
+		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), PlaceableActor->ErrorSound, PlaceableActor->GetActorTransform().GetLocation());
+		}
 	}
+}
+
+void APlayerPawnController::DeactivateConstructionEffects(UParticleSystemComponent* _SmokeUParticleSystemComponent)
+{
+	//_SmokeUParticleSystemComponent->SetEmitterEnable(TEXT("P_Steam_Lit"), false);
+	_SmokeUParticleSystemComponent->DeactivateSystem();
 }

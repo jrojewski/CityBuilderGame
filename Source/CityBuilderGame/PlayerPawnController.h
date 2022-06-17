@@ -37,6 +37,13 @@ public:
 	ABuilding* PlaceableActor = nullptr;
 
 	int* LimitedNumberOfBuildingsType;
+
+	UPROPERTY(BlueprintReadOnly)
+	UUserWidget* InGameMenu;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bInGameMenuAvailable = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -44,8 +51,6 @@ protected:
 private:
 	UPROPERTY()
 	bool bPlacementModeEnabled = false;
-	//UPROPERTY()
-	//AActor* PlaceableActor;
 	UPROPERTY(EditDefaultsOnly)
 	UClass* PlaceableActorType = ABuilding::StaticClass();
 	UPROPERTY()
@@ -54,4 +59,9 @@ private:
 	class UStartGameBoard* StartGameBoard;
 	class UPlayerHUD* PlayerHUD;
 	class UEndGameBoard* EndGameBoard;
+
+	FTimerHandle ConstructionEffectsTimer;
+	FTimerDelegate ConstructionEffectsDelegate;
+	UFUNCTION()
+	void DeactivateConstructionEffects(UParticleSystemComponent* _SmokeUParticleSystemComponent);
 };

@@ -19,5 +19,6 @@ public:
 
 	TSubclassOf<class UStartGameBoard> StartGameBoardClass;
 	TSubclassOf<class UPlayerHUD> PlayerHUDClass;
+	TSubclassOf<UUserWidget> InGameMenuClass;
 	TSubclassOf<class UEndGameBoard> EndGameBoardClass;
 };

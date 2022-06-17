@@ -33,12 +33,6 @@ UPlacementComponent::UPlacementComponent()
 void UPlacementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-
-	//GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UPlacementComponent::UpdateState);
-	//GetOwner()->OnActorEndOverlap.AddDynamic(this, &UPlacementComponent::UpdateState);
-
-	//UpdateStateLogic();
 }
 
 
@@ -46,22 +40,13 @@ void UPlacementComponent::BeginPlay()
 void UPlacementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-void UPlacementComponent::UpdateState(AActor* OverlappedActor, AActor* OtherActor)
-{
-	//UpdateStateLogic();
 }
 
 void UPlacementComponent::UpdateStateLogic(AGridCell* CurrentGridCell)
 {
-	//TSet<AActor*> CurrentOverlappingActors; For tests put in public
 	GetOwner()->GetOverlappingActors(CurrentOverlappingActors);
 
 	AGridManager* CurrentGridManager = Cast<AGridManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AGridManager::StaticClass()));
-	//AGridCell* CurrentGridCell = CurrentGridManager->GetClosestGridCell(Cast<APlayerPawnController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->PlaceableActor->GetActorLocation());
 
 	if (CurrentGridManager->NumOfBuildings > 0)
 	{
@@ -99,7 +84,7 @@ void UPlacementComponent::UpdateStateLogic(AGridCell* CurrentGridCell)
 			}
 		}
 
-		if ((CurrentGridCell->GetGridCellType() != EGridCellType::Blue) && (CurrentGridCell->bIsOccupied == false) && (bIsNeighbourOccupied == true)) //&& (CurrentGridCell->NeighbourEast->bIsOccupied == true || CurrentGridCell->NeighbourWest->bIsOccupied == true || CurrentGridCell->NeighbourNorth->bIsOccupied == true || CurrentGridCell->NeighbourSouth->bIsOccupied == true))
+		if ((CurrentGridCell->GetGridCellType() != EGridCellType::Blue) && (CurrentGridCell->bIsOccupied == false) && (bIsNeighbourOccupied == true))
 		{
 			bIsPlacementValid = true;
 			TArray<UActorComponent*> StaticMeshes = GetOwner()->GetComponentsByClass(UStaticMeshComponent::StaticClass());

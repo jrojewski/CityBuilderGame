@@ -16,9 +16,6 @@ public:
 	// Sets default values for this component's properties
 	UPlacementComponent();
 
-	UFUNCTION()
-	void UpdateState(AActor* OverlappedActor, AActor* OtherActor);
-
 	TSet<AActor*> CurrentOverlappingActors;
 protected:
 	// Called when the game starts
@@ -37,6 +34,4 @@ public:
 	UMaterialInterface* InValidPlacementMaterial;
 
 	void UpdateStateLogic(class AGridCell* CurrentGridCell);
-private:
-	//void UpdateStateLogic();
 };

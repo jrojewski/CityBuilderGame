@@ -19,8 +19,6 @@ void ACityBuilderGameStateBase::BeginPlay()
 	LimitedNumberOfBuildingsType3 = TempBuildingData.LimitedNumberOfBuildingsType;
 	TempBuildingData = CityBuilderGameGameModeBase->GetBuildingTypeData4();
 	LimitedNumberOfBuildingsType4 = TempBuildingData.LimitedNumberOfBuildingsType;
-
-	UE_LOG(LogTemp, Warning, TEXT("LimitedNumberOfBuildingsType1: %d"), LimitedNumberOfBuildingsType1)
 }
 
 int ACityBuilderGameStateBase::GetLimitedNumberOfBuildingsType1() const

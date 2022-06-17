@@ -67,8 +67,6 @@ AGridCell* AGridManager::GetClosestGridCell(FVector_NetQuantize InPosition)
 		}
 	}
 
-
-
 	return GridArray[ArrayIndex];
 }
 
@@ -82,7 +80,6 @@ void AGridManager::PopulateGrid()
 	{
 		for (int x = 0; x < GridSize; x++)
 		{
-			//FMath::RandRange(1, NumOfGridCellTypes)
 			GridArray.Add(GetWorld()->SpawnActor<AGridCell>(BP_GridCell, FVector(((x * WorldGridSize) - WorldOffset), ((y * WorldGridSize) - WorldOffset), 0.0f), FRotator(0.0f, 0.0f, 0.0f)));
 		}
 	}
