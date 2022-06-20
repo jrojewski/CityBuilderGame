@@ -1,6 +1,6 @@
 # CityBuilderGame - Blocky Builder
 
-Source code of building Unreal Engine game. You can download it from https://vinci1337.itch.io/blocky-builder
+Source code of strategy Unreal Engine game. You can download it from https://vinci1337.itch.io/blocky-builder
 
 Video:
 https://twitter.com/Vinci1337/status/1538954971974144003
